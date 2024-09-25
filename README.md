@@ -13,7 +13,7 @@ Developed by **Weng**, **Van Con**, and **Suki**
 | `booking_date`     | Booking Date                    | Mandatory            | Manually Input            | Date                   | `2024-09-30`        |
 | `booking_session`  | Booking Session (Morning/Afternoon) | Mandatory            | Manually Input            | Boolean (0 = Morning, 1 = Afternoon) | 0 or 1              |
 | `status`           | Booking Status                  | Mandatory            | System Assigned           | String (2 characters)  | `CR` (Created), `CD` (Cancelled) |
-
+ 
 ---
 
 ## 🛠️ Microservice Functionality
@@ -90,14 +90,41 @@ Ensure you have the following tools installed on your machine:
      ```bash
      cp .env.example .env
      ```
-   - Configure the database in `.env`.
 
-4. **Run Migrations**:
+4. **Configure Database**:
+
+   - If you're using **SQLite**, follow these steps:
+     1. Create an SQLite database file:
+        ```bash
+        touch /full/path/to/database.sqlite
+        ```
+     2. Update your `.env` file as follows:
+        ```bash
+        DB_CONNECTION=sqlite
+        DB_DATABASE=/full/path/to/database.sqlite
+        ```
+
+   - If you're using **MySQL**, configure your `.env` file like this:
+     ```bash
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=your_database_name
+     DB_USERNAME=your_database_username
+     DB_PASSWORD=your_database_password
+     ```
+     Make sure you create the MySQL database:
+     ```bash
+     mysql -u your_database_username -p
+     CREATE DATABASE your_database_name;
+     ```
+
+5. **Run Migrations**:
    ```bash
    php artisan migrate
    ```
 
-5. **Serve the Application**:
+6. **Start the Development Server**:
    ```bash
    php artisan serve
    ```
@@ -137,3 +164,5 @@ Ensure you have the following tools installed on your machine:
    ```bash
    DELETE http://127.0.0.1:8000/api/service-requests/booking_reference/BK0001
    ```
+
+---
