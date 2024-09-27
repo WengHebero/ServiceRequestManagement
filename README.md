@@ -1,8 +1,8 @@
 ```markdown
-# Service Request Management API
+# Service Request Management API 🚀
 
 ## Developed by
-Weng, Van Con, and Suki
+Weng, Van Con, and Suki 👨‍💻👩‍💻
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -13,7 +13,7 @@ Weng, Van Con, and Suki
 - [Updating the GitHub Repository](#updating-the-github-repository)
 
 ## Introduction
-This is an API designed for managing service requests. It allows residents and tradies to create, view, and manage service bookings.
+This is an API designed for managing service requests. It allows residents and tradies to create, view, and manage service bookings. 📅
 
 ## Data Table Specification
 | Field Name          | Description                                     | Mandatory / Optional | Manual / System Assigned | Specification                        | Sample Data           |
@@ -54,7 +54,7 @@ This is an API designed for managing service requests. It allows residents and t
    - Path: `/api/service-requests/tradie_id/[Tradie Id]`  
    - User group: Residents 
 
-## Running Locally
+## Running Locally 🖥️
 To run the project locally, follow these steps:
 
 1. **Clone the Repository**
@@ -87,7 +87,7 @@ To run the project locally, follow these steps:
    php artisan serve
    ```
 
-## Docker Deployment
+## Docker Deployment 🐳
 To deploy the application using Docker, follow these steps:
 
 1. **Create a `docker-compose.yml` file** (if not already present):
@@ -122,9 +122,9 @@ To deploy the application using Docker, follow these steps:
    ```
 
 4. **Access the Application**
-   - Open your browser and navigate to `http://localhost:8000`.
+   - Open your browser and navigate to `http://localhost:8000`. 🌐
 
-## Updating the GitHub Repository
+## Updating the GitHub Repository 📦
 To update the GitHub repository with new changes:
 
 1. **Stage Changes**
