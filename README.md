@@ -1,168 +1,143 @@
-# 🛠️ API Design For Service Management
+```markdown
+# Service Request Management API
 
-Developed by **Weng**, **Van Con**, and **Suki**
+## Developed by
+Weng, Van Con, and Suki
 
-## 📊 Data Table Specification for Service Request Management
+## Table of Contents
+- [Introduction](#introduction)
+- [Data Table Specification](#data-table-specification)
+- [Microservice for Service Request Management](#microservice-for-service-request-management)
+- [Running Locally](#running-locally)
+- [Docker Deployment](#docker-deployment)
+- [Updating the GitHub Repository](#updating-the-github-repository)
 
-| Field Name         | Description                     | Mandatory / Optional | Manual / System Assigned | Specification          | Sample Data         |
-|--------------------|---------------------------------|----------------------|--------------------------|------------------------|---------------------|
-| `booking_reference`| Booking Reference Number        | Mandatory            | System Assigned           | Primary Key, String (6) | `BK0001`, `BK0002`  |
-| `resident_id`      | Resident ID                     | Mandatory            | Manually Input            | Foreign Key of Resident Table | Follows Resident Table |
-| `tradie_id`        | Tradie ID                       | Mandatory            | Manually Input            | Foreign Key of Tradies Table | Follows Tradies Table |
-| `service_id`       | Service ID                      | Mandatory            | Manually Input            | Foreign Key of Service Management Table | Follows Service Management Table |
-| `booking_date`     | Booking Date                    | Mandatory            | Manually Input            | Date                   | `2024-09-30`        |
-| `booking_session`  | Booking Session (Morning/Afternoon) | Mandatory            | Manually Input            | Boolean (0 = Morning, 1 = Afternoon) | 0 or 1              |
-| `status`           | Booking Status                  | Mandatory            | System Assigned           | String (2 characters)  | `CR` (Created), `CD` (Cancelled) |
- 
----
+## Introduction
+This is an API designed for managing service requests. It allows residents and tradies to create, view, and manage service bookings.
 
-## 🛠️ Microservice Functionality
+## Data Table Specification
+| Field Name          | Description                                     | Mandatory / Optional | Manual / System Assigned | Specification                        | Sample Data           |
+|---------------------|-------------------------------------------------|-----------------------|--------------------------|-------------------------------------|------------------------|
+| booking_reference    | Booking Reference Number                         | Mandatory             | System Assigned          | Primary Key, String (6)            | “BK” + 4 digits        |
+|                     |                                                 |                       |                          |                                     | BK0001, BK0002 …      |
+| resident_id         | Resident ID                                     | Mandatory             | Manually Input           | Foreign Key of Resident Table       | Follow Resident Table   |
+| tradie_id           | Tradie ID                                       | Mandatory             | Manually Input           | Foreign Key of Tradies Table        | Follow Tradies Table    |
+| service_id          | Service ID                                      | Mandatory             | Manually Input           | Foreign Key of Service Management Table | Follow Service Management Table |
+| booking_date        | Booking Date                                    | Mandatory             | Manually Input           | Date                                |                        |
+| booking_session      | Boolean                                         | Mandatory             | Manually Input           | 0 – Morning, 1 – Afternoon          |                        |
+| status              | Booking Status                                  | Mandatory             | System Assigned          | Character (2)                       | CR – create, CD – cancelled |
 
-### 1. Create a New Service Request 📅
-- **API Method**: `POST`
-- **Path**: `/api/service-requests`
-- **Body**:
-  ```json
-  {
-      "resident_id": "resident1",
-      "tradie_id": "tradie1",
-      "service_id": "service1",
-      "booking_date": "2024-09-30",
-      "booking_session": true
-  }
-  ```
-- **Response**: Creates a new booking and returns the booking details with a generated `booking_reference`.
+## Microservice for Service Request Management
+1. **New Booking Creation**  
+   - API method: `POST`  
+   - Path: `/api/service-requests`
 
-### 2. Retrieve Booking by Booking Reference 🔍
-- **API Method**: `GET`
-- **Path**: `/api/service-requests/booking_reference/{Booking Reference}`
-- **User Group**: Resident or Admin
-- **Response**: Returns the booking information for the specified booking reference.
+2. **Search Booking Information by Booking Reference Number**  
+   - API method: `GET`  
+   - Path: `/api/service-requests/booking_reference/[Booking Reference No]`  
+   - User group: Resident or Admin
 
-### 3. Retrieve Booking by Tradie ID 🛠️
-- **API Method**: `GET`
-- **Path**: `/api/service-requests/tradie_id/{Tradie ID}`
-- **User Group**: Tradie or Admin
-- **Response**: Returns all bookings associated with a given tradie.
+3. **Search Booking Information by Tradie ID**  
+   - API method: `GET`  
+   - Path: `/api/service-requests/tradie_id/[Tradie Id]`  
+   - User group: Tradie or Admin
 
-### 4. Cancel a Booking (Update Status to "Cancelled") ❌
-- **API Method**: `PUT`
-- **Path**: `/api/service-requests/booking_reference/{Booking Reference}`
-- **Body**:
-  ```json
-  {
-      "status": "Cancelled"
-  }
-  ```
-- **Response**: Updates the booking status to `Cancelled`.
+4. **Cancel Booking**  
+   - API method: `PUT`  
+   - Path: `/api/service-requests/booking_reference/[Booking Reference No]`  
+   - Path: `/api/service-requests/tradie_id/[Tradie Id]`  
+   - User group: Residents 
 
-### 5. Delete a Booking 🗑️
-- **API Method**: `DELETE`
-- **Path**: `/api/service-requests/booking_reference/{Booking Reference}`
-- **Response**: Deletes the specified booking.
+5. **Delete Booking**  
+   - API method: `DELETE`  
+   - Path: `/api/service-requests/booking_reference/[Booking Reference No]`  
+   - Path: `/api/service-requests/tradie_id/[Tradie Id]`  
+   - User group: Residents 
 
----
+## Running Locally
+To run the project locally, follow these steps:
 
-## 💻 How to Run Locally
-
-### Prerequisites:
-Ensure you have the following tools installed on your machine:
-- PHP (>= 7.4)
-- Composer
-- SQLite or MySQL (or your preferred database)
-- Git
-
-### Step-by-Step Guide:
-
-1. **Clone the Repository**:
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/WengHebero/ServiceRequestManagement.git
    cd ServiceRequestManagement
    ```
 
-2. **Install Dependencies**:
+2. **Install Dependencies**
    ```bash
    composer install
+   npm install
    ```
 
-3. **Set Up Environment**:
-   - Copy `.env.example` to `.env`:
-     ```bash
-     cp .env.example .env
-     ```
+3. **Setup the Environment**
+   - Rename `.env.example` to `.env` and set up your database configuration.
 
-4. **Configure Database**:
+4. **Generate Application Key**
+   ```bash
+   php artisan key:generate
+   ```
 
-   - If you're using **SQLite**, follow these steps:
-     1. Create an SQLite database file:
-        ```bash
-        touch /full/path/to/database.sqlite
-        ```
-     2. Update your `.env` file as follows:
-        ```bash
-        DB_CONNECTION=sqlite
-        DB_DATABASE=/full/path/to/database.sqlite
-        ```
-
-   - If you're using **MySQL**, configure your `.env` file like this:
-     ```bash
-     DB_CONNECTION=mysql
-     DB_HOST=127.0.0.1
-     DB_PORT=3306
-     DB_DATABASE=your_database_name
-     DB_USERNAME=your_database_username
-     DB_PASSWORD=your_database_password
-     ```
-     Make sure you create the MySQL database:
-     ```bash
-     mysql -u your_database_username -p
-     CREATE DATABASE your_database_name;
-     ```
-
-5. **Run Migrations**:
+5. **Run Migrations**
    ```bash
    php artisan migrate
    ```
 
-6. **Start the Development Server**:
+6. **Serve the Application**
    ```bash
    php artisan serve
    ```
 
-   The application will now be running on `http://127.0.0.1:8000`.
+## Docker Deployment
+To deploy the application using Docker, follow these steps:
 
----
+1. **Create a `docker-compose.yml` file** (if not already present):
+   ```yaml
+   version: '3.8'
 
-## 🧪 API Testing with Postman
+   services:
+     app:
+       build:
+         context: .
+         dockerfile: Dockerfile
+       ports:
+         - "8000:8000"
+       volumes:
+         - .:/var/www
+       networks:
+         - app-network
 
-### Example Requests:
-
-- **Create a Booking** (`POST`):
-   ```json
-   {
-      "resident_id": "resident1",
-      "tradie_id": "tradie1",
-      "service_id": "service1",
-      "booking_date": "2024-09-30",
-      "booking_session": true
-   }
+   networks:
+     app-network:
+       driver: bridge
    ```
 
-- **Get All Bookings** (`GET`):
+2. **Build the Docker Image**
    ```bash
-   GET http://127.0.0.1:8000/api/service-requests
+   docker-compose build
    ```
 
-- **Update Booking Status** (`PUT`):
-   ```json
-   {
-       "status": "Completed"
-   }
-   ```
-
-- **Delete a Booking** (`DELETE`):
+3. **Run the Docker Container**
    ```bash
-   DELETE http://127.0.0.1:8000/api/service-requests/booking_reference/BK0001
+   docker-compose up -d
    ```
 
----
+4. **Access the Application**
+   - Open your browser and navigate to `http://localhost:8000`.
+
+## Updating the GitHub Repository
+To update the GitHub repository with new changes:
+
+1. **Stage Changes**
+   ```bash
+   git add .
+   ```
+
+2. **Commit Changes**
+   ```bash
+   git commit -m "Your commit message"
+   ```
+
+3. **Push Changes**
+   ```bash
+   git push origin main
+   ```
